@@ -1,0 +1,48 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+wlog() {
+    local message="$1"
+    echo "$message" 2>&1 | tee -a "$HOME/wyoming-satellite.log"
+}
+
+echo "" > "$HOME/wyoming-satellite.log"
+wlog "$(date)"
+
+wlog "Ensure sox is available..."
+if ! command -v rec > /dev/null 2>&1 || ! command -v play > /dev/null 2>&1; then
+    wlog "sox was not found, installing it now..."
+    pkg i -y sox
+    if ! command -v rec > /dev/null 2>&1 || ! command -v play > /dev/null 2>&1; then
+        wlog "ERROR: Failed to install sox" >&2
+        exit 1
+    fi
+fi
+
+wlog "Enter wyoming-satellite directory..."
+cd "$HOME/wyoming-satellite"
+
+wlog "Ensure module-sles-source is loaded..."
+if ! pactl list short modules | grep "module-sles-source" ; then
+    pactl load-module module-sles-source
+fi
+
+export TERMUX_INFO="$(termux-info)"
+export MANUFACTURER_NAME="$(echo "$TERMUX_INFO" | grep -A 1 "Device manufacturer:" | tail -1)"
+export MODEL_NAME="$(echo "$TERMUX_INFO" | grep -A 1 "Device model:" | tail -1)"
+if [ "$MANUFACTURER_NAME $MODEL_NAME" = " " ]; then 
+    export SATELLITE_NAME="Android Satellite"
+else
+    export SATELLITE_NAME="Android Satellite - $MANUFACTURER_NAME $MODEL_NAME"
+fi
+
+wlog "Ensure module-sles-source is loaded..."
+stdbuf -oL -eL python3 ./script/run \
+--name "$SATELLITE_NAME" \
+--uri 'tcp://0.0.0.0:10700' \
+--mic-command 'rec -r 16000 -c 1 -b 16 -e signed-integer -t raw --no-show-progress -' \
+--snd-command 'play -r 22050 -c 1 -b 16 -e signed-integer -t raw --no-show-progress -' \
+--awake-wav ./sounds/awake.wav \
+--done-wav ./sounds/done.wav \
+--timer-finished-wav ./sounds/timer_finished.wav \
+--timer-finished-wav-repeat 5 0.5 \
+--debug 2>&1 | tee -a "$HOME/wyoming-satellite.log"
