@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
+export OWW_ENABLED=false
 
 wlog() {
     local message="$1"
@@ -6,6 +7,7 @@ wlog() {
 }
 
 echo "" > "$HOME/wyoming-satellite.log"
+#echo "" > "$HOME/wyoming-openwakeword.log"
 wlog "$(date)"
 
 wlog "Ensure sox is available..."
@@ -18,14 +20,6 @@ if ! command -v rec > /dev/null 2>&1 || ! command -v play > /dev/null 2>&1; then
     fi
 fi
 
-wlog "Enter wyoming-satellite directory..."
-cd "$HOME/wyoming-satellite"
-
-wlog "Ensure module-sles-source is loaded..."
-if ! pactl list short modules | grep "module-sles-source" ; then
-    pactl load-module module-sles-source
-fi
-
 export TERMUX_INFO="$(termux-info)"
 export MANUFACTURER_NAME="$(echo "$TERMUX_INFO" | grep -A 1 "Device manufacturer:" | tail -1)"
 export MODEL_NAME="$(echo "$TERMUX_INFO" | grep -A 1 "Device model:" | tail -1)"
@@ -35,7 +29,23 @@ else
     export SATELLITE_NAME="Android Satellite - $MANUFACTURER_NAME $MODEL_NAME"
 fi
 
+if [ "$OWW_ENABLED" = "true" ]; then
+    export OWW_FLAGS="--wake-uri tcp://127.0.0.1:10400 --wake-word-name ok_nabu"
+    wlog "Enter wyoming-openwakeword directory..."
+    cd "$HOME/wyoming-openwakeword"
+    stdbuf -oL -eL python3 ./script/run --uri 'tcp://0.0.0.0:10400' --preload-model 'ok_nabu' --debug 2>&1 | tee -a "$HOME/wyoming-satellite.log" &
+else
+    export OWW_FLAGS=""
+fi
+
+wlog "Enter wyoming-satellite directory..."
+cd "$HOME/wyoming-satellite"
+
 wlog "Ensure module-sles-source is loaded..."
+if ! pactl list short modules | grep "module-sles-source" ; then
+    pactl load-module module-sles-source
+fi
+
 stdbuf -oL -eL python3 ./script/run \
 --name "$SATELLITE_NAME" \
 --uri 'tcp://0.0.0.0:10700' \
@@ -45,4 +55,5 @@ stdbuf -oL -eL python3 ./script/run \
 --done-wav ./sounds/done.wav \
 --timer-finished-wav ./sounds/timer_finished.wav \
 --timer-finished-wav-repeat 5 0.5 \
+$OWW_FLAGS \
 --debug 2>&1 | tee -a "$HOME/wyoming-satellite.log"

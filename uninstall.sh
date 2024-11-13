@@ -1,7 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/sh
 
 echo "Deleting files and directories related to the project..."
-rm -rf ~/tmp.wav ~/pulseaudio-without-memfd.deb ~/.termux/boot/wyoming-satellite-android ~/wyoming-satellite
+rm -f ~/tmp.wav
+rm -f ~/pulseaudio-without-memfd.deb 
+rm -rf ~/.termux/boot/wyoming-satellite-android 
+rm -rf ~/wyoming-satellite
+rm -rf ~/wyoming-openwakeword
 
 echo "Uninstalling custom pulseaudio build if it is installed..."
 if command -v pulseaudio > /dev/null 2>&1; then

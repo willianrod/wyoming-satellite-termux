@@ -101,6 +101,7 @@ cd wyoming-satellite
 
 echo "Running Wyoming Satellite setup script..."
 ./script/setup
+cd ..
 
 echo "Write down the IP address (most likely starting with '192.') of your device, you should find it in the following output:"
 ifconfig
@@ -114,7 +115,31 @@ echo "Setting up widget shortcut..."
 mkdir -p ~/.shortcuts/tasks/
 ln -s ../../.termux/boot/wyoming-satellite-android ./wyoming-satellite-android
 
-echo "Successfully installed and set up Wyoming Satellite"
 
-echo "Starting it now..."
-~/.termux/boot/wyoming-satellite-android
+echo "Successfully installed and set up Wyoming Satellite"
+echo "Install Wyoming OpenWakeWord as well? [y/N]"
+read install_oww
+if [ "$install_oww" = "y" ] || [ "$install_oww" = "Y" ]; then
+    echo "Ensure python-tflite-runtime, ninja and patchelf are installed..."
+    pkg i -y python-tflite-runtime ninja patchelf
+    echo "Cloning Wyoming OpenWakeWord repo..."
+    cd ~
+    git clone https://github.com/rhasspy/wyoming-openwakeword.git
+    echo "Enter wyoming-openwakeword directory..."
+    cd wyoming-openwakeword
+    echo "Allow system site packages in Wyoming OpenWakeWord setup script..."
+    sed -i 's/\(builder = venv.EnvBuilder(with_pip=True\)/\1, system_site_packages=True/' ./script/setup
+    echo "Running Wyoming OpenWakeWord setup script..."
+    ./script/setup
+    sed -i 's/^export OWW_ENABLED=false$/export OWW_ENABLED=true/' ~/.termux/boot/wyoming-satellite-android
+    cd ..
+    echo "Launch Wyoming OpenWakeWord and Wyoming Satellite now? [y/N]"
+else
+    echo "Launch Wyoming Satellite now? [y/N]"
+fi
+
+read launch_now
+if [ "$launch_now" = "y" ] || [ "$launch_now" = "Y" ]; then
+    echo "Starting it now..."
+    ~/.termux/boot/wyoming-satellite-android
+fi

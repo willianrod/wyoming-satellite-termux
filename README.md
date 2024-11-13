@@ -1,22 +1,22 @@
 ## Wyoming Satellite on Android
 
-This project provides a simple way of setting up 
+This project provides a simple way of setting up Wyoming Satellite and OpenWakeWord on Android.
 
 ### Prerequisites
 
 - Install [Termux](https://github.com/termux/termux-app) (open source terminal emulator app)
 - Install [Termux:API](https://github.com/termux/termux-api) (necessary to get mic access)
-- Install [Termux:Boot](https://github.com/termux/termux-boot) (optional and only required if you want wyoming-satellite to autostart when your device restarts)
+- (Optional) Install [Termux:Boot](https://github.com/termux/termux-boot) and open it once (only required if you want wyoming-satellite to autostart when your device restarts)
 
-### How to install Wyoming Satellite on Android
+### How to install
 
 Open Termux and run:
 
 ``` Bash
-wget -qO- https://raw.githubusercontent.com/T-vK/wyoming-satellite-termux/refs/heads/main/install.sh | bash
+bash <(wget -qO- https://raw.githubusercontent.com/T-vK/wyoming-satellite-termux/refs/heads/main/install.sh)
 ```
 
-### How to uninstall Wyoming Satellite on Android
+### How to uninstall
 
 Open Termux and run:
 
