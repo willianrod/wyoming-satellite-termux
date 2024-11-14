@@ -13,7 +13,7 @@ wlog "$(date)"
 wlog "Ensure sox is available..."
 if ! command -v rec > /dev/null 2>&1 || ! command -v play > /dev/null 2>&1; then
     wlog "sox was not found, installing it now..."
-    pkg i -y sox
+    pkg install sox -y
     if ! command -v rec > /dev/null 2>&1 || ! command -v play > /dev/null 2>&1; then
         wlog "ERROR: Failed to install sox" >&2
         exit 1

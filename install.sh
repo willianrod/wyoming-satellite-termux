@@ -9,7 +9,7 @@ pkg up
 echo "Ensure wget is available..."
 if ! command -v wget > /dev/null 2>&1; then
     echo "Installing wget..."
-    pkg i -y wget
+    pkg install wget -y
     if ! command -v wget > /dev/null 2>&1; then
         echo "ERROR: Failed to install wget" >&2
         exit 1
@@ -22,7 +22,7 @@ wget -qO- https://raw.githubusercontent.com/T-vK/wyoming-satellite-termux/refs/h
 echo "Ensure sox is available..."
 if ! command -v rec > /dev/null 2>&1; then
     echo "Installing sox..."
-    pkg i -y sox
+    pkg install sox -y
     if ! command -v rec > /dev/null 2>&1; then
         echo "ERROR: Failed to install sox (rec not found)" >&2
         exit 1
@@ -36,7 +36,7 @@ fi
 echo "Ensure termux-api is available..."
 if ! command -v termux-microphone-record > /dev/null 2>&1; then
     echo "Installing termux-api..."
-    pkg i -y termux-api
+    pkg install termux-api -y
     if ! command -v termux-microphone-record > /dev/null 2>&1; then
         echo "ERROR: Failed to install termux-api (termux-microphone-record not found)" >&2
         exit 1
@@ -52,17 +52,17 @@ if [ $KERNEL_MAJOR_VERSION -le 3 ]; then
     echo "Checking if pulseaudio is currently installed..."
     if command -v pulseaudio > /dev/null 2>&1; then
         echo "Uninstalling pulseaudio..."
-        pkg remove -y pulseaudio
+        pkg remove pulseaudio -y
     fi
     echo "Downloading pulseaudio build that doesn't require memfd..."
     wget -O ./pulseaudio-without-memfd.deb "https://github.com/T-vK/pulseaudio-termux-no-memfd/releases/download/1.1.0/pulseaudio_17.0-2_${ARCH}.deb"
     echo "Installing the downloaded pulseaudio build..."
-    pkg i -y ./pulseaudio-without-memfd.deb
+    pkg install ./pulseaudio-without-memfd.deb -y
     echo "Removing the downloaded pulseaudio build (not required after installation)..."
     rm -f ./pulseaudio-without-memfd.deb
 else
     if ! command -v pulseaudio > /dev/null 2>&1; then
-        pkg i -y pulseaudio
+        pkg install pulseaudio -y
     fi
 fi
 
@@ -121,7 +121,7 @@ echo "Install Wyoming OpenWakeWord as well? [y/N]"
 read install_oww
 if [ "$install_oww" = "y" ] || [ "$install_oww" = "Y" ]; then
     echo "Ensure python-tflite-runtime, ninja and patchelf are installed..."
-    pkg i -y python-tflite-runtime ninja patchelf
+    pkg install python-tflite-runtime ninja patchelf -y
     echo "Cloning Wyoming OpenWakeWord repo..."
     cd ~
     git clone https://github.com/rhasspy/wyoming-openwakeword.git
