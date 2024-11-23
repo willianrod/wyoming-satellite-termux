@@ -93,6 +93,16 @@ if ! pactl list short sources | grep "module-sles-source.c" ; then
     echo "ERROR: No microphone detected" >&2
 fi
 
+echo "Ensure git is available..."
+if ! command -v git > /dev/null 2>&1; then
+    echo "Installing git..."
+    pkg install git -y
+    if ! command -v git > /dev/null 2>&1; then
+        echo "ERROR: Failed to install git" >&2
+        exit 1
+    fi
+fi
+
 echo "Cloning Wyoming Satellite repo..."
 git clone https://github.com/rhasspy/wyoming-satellite.git
 
