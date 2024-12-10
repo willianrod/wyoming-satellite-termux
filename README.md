@@ -6,7 +6,7 @@ This project provides a simple way of setting up Wyoming Satellite and OpenWakeW
 
 - Install [Termux](https://github.com/termux/termux-app) (open source terminal emulator app)
 - Install [Termux:API](https://github.com/termux/termux-api) (necessary to get mic access)
-- (Optional) Install [Termux:Boot](https://github.com/termux/termux-boot) and open it once (only required if you want wyoming-satellite to autostart when your device restarts)
+- (Optional) Install [Termux:Boot](https://github.com/termux/termux-boot) and [open it once + disable battery optimization for Termux & Termux:Boot](https://wiki.termux.com/wiki/Termux:Boot) (only required if you want wyoming-satellite to autostart when your device restarts)
 
 ### How to install
 
