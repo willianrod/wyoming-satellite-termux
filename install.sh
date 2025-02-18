@@ -33,6 +33,14 @@ if ! command -v rec > /dev/null 2>&1; then
     fi
 fi
 
+# Check if Python is installed
+if ! command -v python &> /dev/null; then
+    echo "Python not found. Installing..."
+    pkg update && pkg install python -y
+else
+    echo "Python is already installed."
+fi
+
 echo "Ensure termux-api is available..."
 if ! command -v termux-microphone-record > /dev/null 2>&1; then
     echo "Installing termux-api..."
