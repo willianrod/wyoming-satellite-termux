@@ -63,7 +63,7 @@ if [ $KERNEL_MAJOR_VERSION -le 3 ]; then
         pkg remove pulseaudio -y
     fi
     echo "Downloading pulseaudio build that doesn't require memfd..."
-    wget -O ./pulseaudio-without-memfd.deb "https://github.com/willianrod/pulseaudio-termux-no-memfd/releases/download/1.1.0/pulseaudio_17.0-2_${ARCH}.deb"
+    wget -O ./pulseaudio-without-memfd.deb "https://github.com/T-vK/pulseaudio-termux-no-memfd/releases/download/1.1.0/pulseaudio_17.0-2_${ARCH}.deb"
     echo "Installing the downloaded pulseaudio build..."
     pkg install ./pulseaudio-without-memfd.deb -y
     echo "Removing the downloaded pulseaudio build (not required after installation)..."
