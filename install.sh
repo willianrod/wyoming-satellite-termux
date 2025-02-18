@@ -81,11 +81,33 @@ termux-microphone-record -q
 echo "Deleting the test recording..."
 rm -f ./tmp.wav
 
+
 echo "Temporarily load PulseAudio module for mic access..."
-if ! pactl list short modules | grep "module-sles-source" ; then
+
+# Check if /system/lib64 exists
+if [ -d "/system/lib64" ]; then
+    echo "/system/lib64 found. Setting LD_PRELOAD..."
+    export LD_PRELOAD=/system/lib64/libskcodec.so
+else
+    echo "/system/lib64 not found. Skipping LD_PRELOAD..."
+fi
+
+# Check if module-sles-source is loaded
+if ! pactl list short modules | grep -q "module-sles-source"; then
+    echo "Loading module-sles-source..."
     if ! pactl load-module module-sles-source; then
-        echo "ERROR: Failed to load module-sles-source" >&2
+        echo "ERROR: Failed to load module-sles-source. Trying to start PulseAudio..." >&2
+        pulseaudio --start
+        if ! pactl load-module module-sles-source; then
+            echo "ERROR: Still failed to load module-sles-source after restarting PulseAudio." >&2
+        else
+            echo "Successfully loaded module-sles-source after restarting PulseAudio."
+        fi
+    else
+        echo "Successfully loaded module-sles-source."
     fi
+else
+    echo "module-sles-source is already loaded."
 fi
 
 echo "Verify that there is at least one microphone detected..."
