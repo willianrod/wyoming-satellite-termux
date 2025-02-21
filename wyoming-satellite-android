@@ -30,10 +30,10 @@ else
 fi
 
 if [ "$OWW_ENABLED" = "true" ]; then
-    export OWW_FLAGS="--wake-uri tcp://127.0.0.1:10400 --wake-word-name ok_nabu"
+    export OWW_FLAGS="--wake-uri tcp://127.0.0.1:10400 --wake-word-name hey_jarvis"
     wlog "Enter wyoming-openwakeword directory..."
     cd "$HOME/wyoming-openwakeword"
-    stdbuf -oL -eL python3 ./script/run --uri 'tcp://0.0.0.0:10400' --preload-model 'ok_nabu' --debug 2>&1 | tee -a "$HOME/wyoming-satellite.log" &
+    stdbuf -oL -eL python3 ./script/run --uri 'tcp://0.0.0.0:10400' --preload-model 'hey_jarvis' --debug 2>&1 | tee -a "$HOME/wyoming-satellite.log" &
 else
     export OWW_FLAGS=""
 fi
