@@ -13,7 +13,7 @@ This project provides a simple way of setting up Wyoming Satellite and OpenWakeW
 Open Termux and run:
 
 ``` Bash
-(command -v wget > /dev/null 2>&1 || (echo "Installing wget..." && pkg install -y wget)) && bash <(wget -qO- https://raw.githubusercontent.com/T-vK/wyoming-satellite-termux/refs/heads/main/install.sh)
+(command -v wget > /dev/null 2>&1 || (echo "Installing wget..." && pkg install -y wget)) && bash <(wget -qO- https://raw.githubusercontent.com/willianrod/wyoming-satellite-termux/refs/heads/main/install.sh)
 
 ```
 
@@ -22,7 +22,7 @@ Open Termux and run:
 Open Termux and run:
 
 ``` Bash
-wget -qO- https://raw.githubusercontent.com/T-vK/wyoming-satellite-termux/refs/heads/main/uninstall.sh | bash
+wget -qO- https://raw.githubusercontent.com/willianrod/wyoming-satellite-termux/refs/heads/main/uninstall.sh | bash
 ```
 
 ### Integrate into HomeAssistant
