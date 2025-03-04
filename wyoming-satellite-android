@@ -1,5 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/sh
+export LD_PRELOAD=/system/lib64/libskcodec.so
 export OWW_ENABLED=false
+
+pulseaudio --start
 
 wlog() {
     local message="$1"
