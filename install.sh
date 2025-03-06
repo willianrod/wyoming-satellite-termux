@@ -167,6 +167,12 @@ if [ "$install_oww" = "y" ] || [ "$install_oww" = "Y" ]; then
     git clone https://github.com/rhasspy/wyoming-openwakeword.git
     echo "Enter wyoming-openwakeword directory..."
     cd wyoming-openwakeword
+
+    mkdir -p models
+    
+    echo "Downloading ok_ada_v3.tflite model into models folder..."
+    wget -q --show-progress "https://github.com/willianrod/wyoming-satellite-termux/raw/refs/heads/main/ok_ada_v3.tflite" -P models
+
     echo "Allow system site packages in Wyoming OpenWakeWord setup script..."
     sed -i 's/\(builder = venv.EnvBuilder(with_pip=True\)/\1, system_site_packages=True/' ./script/setup
     echo "Running Wyoming OpenWakeWord setup script..."
